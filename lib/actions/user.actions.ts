@@ -1,22 +1,25 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
-
 import { CreateUserParams, UpdateUserParams } from '@/types'
 import { connectToDatabase } from '../database'
 import User from '../database/models/user.model'
 import { handleError } from '../utils'
-import Order from '../database/models/order.model'
 import Event from '../database/models/event.model'
+import Order from '../database/models/order.model'
+import { revalidatePath } from 'next/cache'
 
 export async function createUser(user: CreateUserParams) {
   try {
-    await connectToDatabase()
+    await connectToDatabase();
+    console.log('Connecting to database...');
+    console.log('User data:', user);
 
-    const newUser = await User.create(user)
-    return JSON.parse(JSON.stringify(newUser))
+    const newUser = await User.create(user);
+    console.log('User created:', newUser);
+    return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
-    handleError(error)
+    console.error('Error creating user:', error);
+    handleError(error);
   }
 }
 
